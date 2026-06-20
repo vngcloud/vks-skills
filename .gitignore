@@ -1,0 +1,4 @@
+.DS_Store
+.agentbase/
+.greennode.json
+__pycache__/
