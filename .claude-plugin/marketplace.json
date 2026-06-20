@@ -1,10 +1,10 @@
 {
-  "name": "vngcloud",
+  "name": "greennode",
   "metadata": {
-    "description": "VNG Cloud Claude plugins — VKS Assistant skills for natural-language Kubernetes cluster management."
+    "description": "GreenNode Claude plugins — VKS Assistant skills for natural-language Kubernetes cluster management."
   },
   "owner": {
-    "name": "VNG Cloud",
+    "name": "GreenNode",
     "url": "https://github.com/vngcloud"
   },
   "plugins": [

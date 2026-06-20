@@ -26,10 +26,10 @@ This repo is a Claude Code plugin (manifest in `.claude-plugin/`). Three ways to
 **1. As a plugin via the marketplace (recommended)**
 ```
 /plugin marketplace add vngcloud/vks-skills
-/plugin install vks-skills@vngcloud
+/plugin install vks-skills@greennode
 /reload-plugins
 ```
-Skills are then available namespaced, e.g. `/vks-skills:vks-create-cluster`.
+Note: `vngcloud/vks-skills` is the GitHub repo path; `@greennode` is the marketplace name (from `marketplace.json`). Skills are then available namespaced, e.g. `/vks-skills:vks-create-cluster`.
 
 **2. Local plugin directory (for trying it out)**
 ```
@@ -48,13 +48,13 @@ To push these skills to a whole team, copy [`examples/team-settings.json`](examp
 ```json
 {
   "extraKnownMarketplaces": {
-    "vngcloud": { "source": { "source": "github", "repo": "vngcloud/vks-skills" }, "autoUpdate": true }
+    "greennode": { "source": { "source": "github", "repo": "vngcloud/vks-skills" }, "autoUpdate": true }
   },
-  "enabledPlugins": { "vks-skills@vngcloud": true }
+  "enabledPlugins": { "vks-skills@greennode": true }
 }
 ```
 
-The `"vngcloud"` key must match the `name` field in this repo's `.claude-plugin/marketplace.json`. For a **private** marketplace repo, background auto-update needs `GITHUB_TOKEN`/`GH_TOKEN` in the environment.
+The `"greennode"` key must match the `name` field in this repo's `.claude-plugin/marketplace.json` (the marketplace name); the repo path stays `vngcloud/vks-skills`. For a **private** marketplace repo, background auto-update needs `GITHUB_TOKEN`/`GH_TOKEN` in the environment.
 
 ## Use with Cursor / Codex (and other SKILL.md tools)
 

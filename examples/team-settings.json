@@ -1,7 +1,7 @@
 {
-  "//": "Copy this into your project's .claude/settings.json (or your org's managed settings) to auto-distribute the VKS Assistant skills to your team. When a teammate trusts the repo, Claude Code prompts them to add the marketplace and install the plugin. The key 'vngcloud' must match the 'name' field in vks-skills' marketplace.json.",
+  "//": "Copy this into your project's .claude/settings.json (or your org's managed settings) to auto-distribute the VKS Assistant skills to your team. When a teammate trusts the repo, Claude Code prompts them to add the marketplace and install the plugin. The key 'greennode' must match the 'name' field in vks-skills' marketplace.json; the repo path stays vngcloud/vks-skills (where it is hosted).",
   "extraKnownMarketplaces": {
-    "vngcloud": {
+    "greennode": {
       "source": {
         "source": "github",
         "repo": "vngcloud/vks-skills"
@@ -10,6 +10,6 @@
     }
   },
   "enabledPlugins": {
-    "vks-skills@vngcloud": true
+    "vks-skills@greennode": true
   }
 }
