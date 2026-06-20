@@ -1,5 +1,8 @@
 {
   "name": "vks-team",
+  "metadata": {
+    "description": "VNG Cloud (vks-team) Claude plugins — VKS Assistant skills for natural-language Kubernetes cluster management."
+  },
   "owner": {
     "name": "VNG Cloud (vks-team)",
     "url": "https://github.com/vks-team"
