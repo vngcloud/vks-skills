@@ -1,0 +1,14 @@
+{
+  "name": "vks-team",
+  "owner": {
+    "name": "VNG Cloud (vks-team)",
+    "url": "https://github.com/vks-team"
+  },
+  "plugins": [
+    {
+      "name": "vks-skills",
+      "source": "./",
+      "description": "VKS Assistant skills — create and manage VKS (VNG Kubernetes Service) clusters in natural language."
+    }
+  ]
+}

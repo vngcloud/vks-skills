@@ -21,7 +21,25 @@ The skills orchestrate the [VKS MCP server](https://github.com/vngcloud/greenode
 
 ## Install
 
-Copy `skills/` into your Claude skills directory (e.g. `~/.claude/skills/`), or add this repo as a plugin source. Each skill is a standard `SKILL.md` with `name` + `description` frontmatter.
+This repo is a Claude Code plugin (manifest in `.claude-plugin/`). Three ways to use it:
+
+**1. As a plugin via the marketplace (recommended)**
+```
+/plugin marketplace add vks-team/vks-skills
+/plugin install vks-skills@vks-team
+/reload-plugins
+```
+Skills are then available namespaced, e.g. `/vks-skills:vks-create-cluster`.
+
+**2. Local plugin directory (for trying it out)**
+```
+claude --plugin-dir /path/to/vks-skills
+```
+
+**3. Manual copy**
+Copy the `skills/` subfolders into your Claude skills directory (e.g. `~/.claude/skills/`). Keep the directory layout intact — `vks-create-cluster` and `vks-nodegroup` reference `skills/vks/references/resource-defaults.md` by relative path.
+
+Each skill is a standard `SKILL.md` with `name` + `description` frontmatter; skills are auto-discovered from `skills/`.
 
 ## Design
 
