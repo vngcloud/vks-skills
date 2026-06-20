@@ -56,6 +56,50 @@ To push these skills to a whole team, copy [`examples/team-settings.json`](examp
 
 The `"vks-team"` key must match the `name` field in this repo's `.claude-plugin/marketplace.json`. For a **private** marketplace repo, background auto-update needs `GITHUB_TOKEN`/`GH_TOKEN` in the environment.
 
+## Use with Cursor / Codex (and other SKILL.md tools)
+
+`SKILL.md` is a cross-agent standard — these skills run unmodified in Cursor, Codex, Gemini CLI, etc. Two things differ from Claude Code:
+
+**1. Installation = copy `skills/` (the plugin marketplace is Claude-Code-only).** Keep the directory layout intact — `vks-create-cluster` and `vks-nodegroup` reference `vks/references/resource-defaults.md` by relative path, so the four skill folders must stay siblings.
+
+| Tool | Put the `skills/` folders in |
+|------|------------------------------|
+| Cursor | `.cursor/skills/` (project) — then reload the workspace |
+| Codex | `~/.agents/skills/` (or Codex's skills dir) |
+
+**2. Configure the `greenode-mcp` MCP server in that tool** — the skills call its tools, so without it they have nothing to drive. Use `--allow-write` to enable create/scale/delete. Credentials come from `~/.greenode/` (run `grn configure`); the `env` block below is only needed if you don't use `~/.greenode`. Adjust `command`/`args` to however you run `greenode-mcp` (e.g. `uv run --directory <repo>/src/vks-mcp-server vks-mcp-server`).
+
+**Cursor** — `.cursor/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "greenode-mcp": {
+      "command": "vks-mcp-server",
+      "args": ["--allow-write"],
+      "env": {
+        "GRN_CLIENT_ID": "<client-id>",
+        "GRN_CLIENT_SECRET": "<client-secret>",
+        "GRN_PROJECT_ID": "<project-id>"
+      }
+    }
+  }
+}
+```
+
+**Codex** — `~/.codex/config.toml` (or `codex mcp add greenode-mcp -- vks-mcp-server --allow-write`):
+```toml
+[mcp_servers.greenode-mcp]
+command = "vks-mcp-server"
+args = ["--allow-write"]
+
+[mcp_servers.greenode-mcp.env]
+GRN_CLIENT_ID = "<client-id>"
+GRN_CLIENT_SECRET = "<client-secret>"
+GRN_PROJECT_ID = "<project-id>"
+```
+
+In Cursor invoke a skill from the slash-command menu; in Codex it loads skills automatically (run `/mcp` to confirm the server is connected).
+
 ## Design
 
 These skills implement the design at `docs/superpowers/specs/2026-06-20-vks-assistant-skills-design.md` (in the working repo). The shared default-picking logic lives in `skills/vks/references/resource-defaults.md` and is consumed by both `vks-create-cluster` and `vks-nodegroup`.
