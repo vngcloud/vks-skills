@@ -95,7 +95,7 @@ Once ACTIVE, call `cluster_get_kubeconfig` and give the user the kubeconfig, wit
 | "for production" / "HA" | Suggest 3 nodes; keep other defaults; still confirm. |
 | "with GPU" / "for AI" | Use `flavor_list need=AI/GPU`; let user pick. |
 | "use CALICO" | Set networkType=CALICO and require a `cidr` (offer `10.96.0.0/12`). |
-| No SSH key exists | Stop; direct user to create one in the console; don't fabricate. |
+| No SSH key exists | Stop; direct user to create one in the console; don't fabricate. On resume, re-run `sshkey_list` with `refresh: true` (cache won't show the new key yet). |
 | Server is read-only | Explain `--allow-write` is needed; don't attempt create. |
 | Validation keeps failing on `diskType` | `SSD` is the default; if rejected, ask the user for a `vtype-…` disk-type id. |
 

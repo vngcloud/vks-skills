@@ -17,6 +17,12 @@ Resolve resource IDs by calling these MCP tools — never ask the user to paste 
 
 Accept names OR IDs from the user and resolve to the ID via these tools.
 
+### Caching & freshness
+Discovery results are cached briefly by the MCP server (TTL tiered by volatility: flavors/versions ~30 min; vpc/subnet/secgroup ~2 min; **ssh keys ~30 s**). The cache refreshes lazily when the TTL expires, and on server restart. It does **not** see resources created outside the MCP server (e.g. in the VNG Cloud console). Each discovery tool takes a **`refresh: true`** flag to bypass the cache. Pass `refresh: true` when:
+- resuming after the user just created a resource in the console (especially an **SSH key** — see "No SSH key"),
+- the user says "I just created X, check again".
+Otherwise rely on the cache (don't set `refresh` on every call).
+
 ## Default-picking policy
 
 | Parameter | Default the assistant picks | Ask the user only when |
@@ -105,7 +111,7 @@ The user usually names a cluster, not an id.
 2. For a node group, `nodegroup_list` on the cluster. If the user said a generic word like "workers" and there's exactly one node group, use it. If several, list them by name and ask — VKS node groups have names, not roles.
 
 ## No SSH key
-VKS needs exactly one SSH key for node access and cannot create one for the user. If `sshkey_list` is empty, stop and tell the user to create a key pair in the VNG Cloud console (vServer → SSH Keys, e.g. `https://hcm-3.console.vngcloud.vn` → vServer → SSH Key; `han-1` console for HAN), then resume by saying `continue` or re-issuing the request. Keep the already-gathered choices and resume from where you stopped — don't restart discovery from scratch.
+VKS needs exactly one SSH key for node access and cannot create one for the user. If `sshkey_list` is empty, stop and tell the user to create a key pair in the VNG Cloud console (vServer → SSH Keys, e.g. `https://hcm-3.console.vngcloud.vn` → vServer → SSH Key; `han-1` console for HAN), then resume by saying `continue` or re-issuing the request. On resume, call `sshkey_list` with **`refresh: true`** (the new key was created in the console, so the short cache won't show it yet). Keep the already-gathered choices and resume from where you stopped — don't restart discovery from scratch.
 
 ## Node-group update body (nodegroup_update)
 `nodegroup_update` takes a **partial** body — send only the fields being changed. Writable fields: `numNodes` (0–10), `securityGroups`, `labels`, `taints`, `autoScaleConfig`. To scale, send `{"numNodes": <n>}`. If the node group has `autoScaleConfig` enabled, a manual `numNodes` may be overridden by the autoscaler — surface this to the user before scaling. Show current → target before confirming, and warn that scaling down drains/removes nodes (workload disruption).

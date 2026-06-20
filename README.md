@@ -135,6 +135,7 @@ In Cursor invoke a skill from the slash-command menu; in Codex it loads skills a
 | Auth fails / 401 | Bad or missing credentials. Re-run `grn configure`, or check `GRN_CLIENT_ID` / `GRN_CLIENT_SECRET`. Verify with the `get_access_token` tool. |
 | `apply_yaml` / `generate_app_manifest` path error | Both require an **absolute** path. |
 | No SSH key found when creating a cluster | VKS needs one key and can't create it; make a key pair in the VNG Cloud console (vServer → SSH Keys), then retry. |
+| "I created a VPC/SSH key in the console but the assistant doesn't see it" | Discovery results are cached briefly (ssh keys ~30s, vpc/subnet ~2min). Ask the assistant to re-check — it passes `refresh: true` to bypass the cache. |
 
 ## Design
 
