@@ -39,6 +39,9 @@ Accept names OR IDs from the user and resolve to the ID via these tools.
 ### Default flavor (when the user expresses no preference)
 There is no hard-coded flavor id. Resolve the default at runtime: call `flavor_list need=Dev/test`; if non-empty, pick the **smallest** by vCPU then RAM. If that group is empty, call `flavor_list` unfiltered and pick the smallest. Show the chosen flavor in the plan as `[auto]` so the user can change it.
 
+### Disk type (no discovery tool)
+There is **no disk-type discovery tool**. Default `diskType` to `"SSD"` and show it as `[auto]`. If `cluster_create_validate` / the API rejects `"SSD"`, the value must be a vServer volume-type id (`vtype-…`) — ask the user to get it from the VNG Cloud console (vServer → Volumes / Volume types). Do not guess a `vtype-…` id.
+
 ## Flavor selection — by deployment need
 
 If the user does not accept the default flavor, ask **"what will this run?"** then call `flavor_list` and show only the matching group:

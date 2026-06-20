@@ -17,10 +17,12 @@ All operations go through the **VKS MCP server** (`greenode-mcp`) tools.
 |--------------|-----|
 | Create a Kubernetes cluster | `/vks-create-cluster` |
 | See what clusters/node groups/nodes/events/versions exist | `/vks-explore` |
+| Connect (kubeconfig), update/upgrade, auto-config, or delete a cluster | `/vks-cluster` |
 | Add, scale, update, delete a node group, or upgrade its version | `/vks-nodegroup` |
+| Deploy an app into a cluster, or inspect pods/logs/events | `/vks-deploy` |
 | Understand the platform, set up auth, or learn the rules | this skill |
 
-If a request is vague ("help me with Kubernetes on VNG"), ask one question to route: *create something new*, *check status*, or *change an existing cluster*.
+If a request is vague ("help me with Kubernetes on VNG"), ask one question to route: *create something new*, *check status*, *operate an existing cluster*, or *deploy an app*.
 
 ## Core concepts (for newcomers)
 
@@ -75,9 +77,11 @@ Full default-picking and discovery logic: `references/resource-defaults.md` (sha
 
 ## HARD GATE — confirmation before any write
 
-Before any tool that creates, updates, deletes, scales, or upgrades, tell the user exactly what will happen and wait for an explicit confirmation keyword: `yes`, `confirm`, `ok`, `approve`, `proceed`, `go ahead`, `do it`, `lgtm`, or equivalent. If the user responds with ANYTHING ELSE (a parameter change, a question, a correction, or ambiguous text), treat it as adjustment input — update the plan and re-present for confirmation again. NEVER interpret a non-confirmation response as approval.
+Before any tool that creates, updates, deletes, scales, or upgrades, tell the user exactly what will happen and wait for an explicit confirmation keyword: `yes`, `confirm`, `ok`, `approve`, `proceed`, `go ahead`, `do it`, `lgtm`, or equivalent. If the user responds with ANYTHING ELSE (a parameter change, a question, a correction, or ambiguous/hedged text like "looks about right I think"), treat it as adjustment input. If they requested a change, update the plan; if no change was requested, re-present the same plan unchanged. Either way, ask again for an explicit keyword. NEVER interpret a non-confirmation response as approval.
 
 ## Available VKS skills
 - `/vks-create-cluster` — create a cluster end-to-end (discovery → plan → confirm → create → kubeconfig)
 - `/vks-explore` — read-only status of clusters, node groups, nodes, events, versions
+- `/vks-cluster` — operate an existing cluster: connect (kubeconfig), update/upgrade, auto-upgrade/healing, delete
 - `/vks-nodegroup` — create / scale / update / delete node groups, upgrade node-group version
+- `/vks-deploy` — deploy apps into a cluster and inspect workloads (manifests, apply YAML, pods, logs, events)

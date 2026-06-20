@@ -11,7 +11,9 @@ The skills orchestrate the [VKS MCP server](https://github.com/vngcloud/greenode
 | **`vks`** | Reference & router — platform overview, auth setup, naming/network rules, "which skill do I need?" |
 | **`vks-create-cluster`** | Create a cluster end-to-end from a natural-language request, ending with kubeconfig |
 | **`vks-explore`** | Read-only status: list/inspect clusters, node groups, nodes, events, k8s versions |
+| **`vks-cluster`** | Operate an existing cluster: connect (kubeconfig), update/upgrade, auto-upgrade/healing, delete |
 | **`vks-nodegroup`** | Create / scale / update / delete node groups, upgrade node-group version |
+| **`vks-deploy`** | Deploy apps into a cluster & inspect workloads (generate/apply manifests, pods, logs, events) |
 
 ## Requirements
 
@@ -119,6 +121,20 @@ args = ["--allow-write"]
 If you prefer env vars (Credentials → Option B) instead of `grn configure`, add them — Cursor: an `"env": { "GRN_CLIENT_ID": "…", "GRN_CLIENT_SECRET": "…", "GRN_PROJECT_ID": "…" }` block in the server entry; Codex: a `[mcp_servers.greenode-mcp.env]` table with the same keys.
 
 In Cursor invoke a skill from the slash-command menu; in Codex it loads skills automatically (run `/mcp` to confirm the server is connected).
+
+## Troubleshooting
+
+| Symptom | Cause / Fix |
+|---------|-------------|
+| `Marketplace "greennode" not found` | You skipped the add step. Run `/plugin marketplace add vngcloud/vks-skills` first, then `/plugin install vks-skills@greennode`. |
+| `/plugin isn't available in this environment` | You're not in a client that supports plugins. Use Claude Code (app/IDE); for Cursor/Codex install by copying `skills/` (see above). |
+| A discovery tool (`vpc_list`, `flavor_list`, …) is "unknown" / not found | Your `greenode-mcp` build predates the discovery tools. Update to a build that includes them. |
+| `project_id is not configured` | Run `grn configure` (sets it in `~/.greenode`) or set `GRN_PROJECT_ID`. See Credentials. |
+| Create / scale / delete fails as read-only | The MCP server is running without `--allow-write`. Restart it with `--allow-write`. |
+| Reading a Secret fails | The server needs `--allow-sensitive-data-access` (in addition to `--allow-write` for writes). |
+| Auth fails / 401 | Bad or missing credentials. Re-run `grn configure`, or check `GRN_CLIENT_ID` / `GRN_CLIENT_SECRET`. Verify with the `get_access_token` tool. |
+| `apply_yaml` / `generate_app_manifest` path error | Both require an **absolute** path. |
+| No SSH key found when creating a cluster | VKS needs one key and can't create it; make a key pair in the VNG Cloud console (vServer → SSH Keys), then retry. |
 
 ## Design
 
