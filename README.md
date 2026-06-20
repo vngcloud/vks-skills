@@ -25,8 +25,8 @@ This repo is a Claude Code plugin (manifest in `.claude-plugin/`). Three ways to
 
 **1. As a plugin via the marketplace (recommended)**
 ```
-/plugin marketplace add vks-team/vks-skills
-/plugin install vks-skills@vks-team
+/plugin marketplace add vngcloud/vks-skills
+/plugin install vks-skills@vngcloud
 /reload-plugins
 ```
 Skills are then available namespaced, e.g. `/vks-skills:vks-create-cluster`.
@@ -48,13 +48,13 @@ To push these skills to a whole team, copy [`examples/team-settings.json`](examp
 ```json
 {
   "extraKnownMarketplaces": {
-    "vks-team": { "source": { "source": "github", "repo": "vks-team/vks-skills" }, "autoUpdate": true }
+    "vngcloud": { "source": { "source": "github", "repo": "vngcloud/vks-skills" }, "autoUpdate": true }
   },
-  "enabledPlugins": { "vks-skills@vks-team": true }
+  "enabledPlugins": { "vks-skills@vngcloud": true }
 }
 ```
 
-The `"vks-team"` key must match the `name` field in this repo's `.claude-plugin/marketplace.json`. For a **private** marketplace repo, background auto-update needs `GITHUB_TOKEN`/`GH_TOKEN` in the environment.
+The `"vngcloud"` key must match the `name` field in this repo's `.claude-plugin/marketplace.json`. For a **private** marketplace repo, background auto-update needs `GITHUB_TOKEN`/`GH_TOKEN` in the environment.
 
 ## Use with Cursor / Codex (and other SKILL.md tools)
 

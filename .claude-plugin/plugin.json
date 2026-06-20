@@ -4,11 +4,11 @@
   "description": "Natural-language VKS (VNG Kubernetes Service) cluster creation & management. Orchestrates the greenode-mcp tools: guided cluster create, read-only explore, and node-group lifecycle.",
   "version": "0.1.0",
   "author": {
-    "name": "VNG Cloud (vks-team)",
-    "url": "https://github.com/vks-team"
+    "name": "VNG Cloud",
+    "url": "https://github.com/vngcloud"
   },
-  "homepage": "https://github.com/vks-team/vks-skills",
-  "repository": "https://github.com/vks-team/vks-skills",
+  "homepage": "https://github.com/vngcloud/vks-skills",
+  "repository": "https://github.com/vngcloud/vks-skills",
   "license": "Apache-2.0",
   "keywords": ["vks", "kubernetes", "vngcloud", "greennode", "mcp", "cluster", "nodegroup"]
 }
