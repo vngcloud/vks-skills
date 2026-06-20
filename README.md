@@ -15,9 +15,37 @@ The skills orchestrate the [VKS MCP server](https://github.com/vngcloud/greenode
 
 ## Requirements
 
-- The **VKS MCP server** (`greenode-mcp`) configured in your Claude client.
-  - For create/scale/delete operations, run it with `--allow-write`.
-- VNG Cloud credentials in `~/.greenode/` (run `grn configure`) including `project_id`, or env vars `GRN_CLIENT_ID` / `GRN_CLIENT_SECRET` / `GRN_PROJECT_ID`.
+- The **VKS MCP server** (`greenode-mcp`) configured in your AI client (Claude Code / Cursor / Codex).
+  - For create/scale/delete operations, run it with `--allow-write` (read-only otherwise).
+- VNG Cloud credentials (see below).
+
+## Credentials
+
+The MCP server authenticates to VKS with a VNG Cloud IAM token derived from a **client_id / client_secret** (an IAM service account), plus a **project_id** (required for resource discovery — vpc/subnet/flavor/sshkey/secgroup). Two ways to provide them:
+
+### Option A — `grn` CLI (recommended)
+
+Install the [GreenNode CLI](https://github.com/vngcloud/greenode-cli) (`grn`) and run:
+
+```bash
+grn configure
+```
+
+It prompts for client_id, client_secret, default region, and project_id (auto-detected if left blank), then writes them to `~/.greenode/credentials` and `~/.greenode/config`. The MCP server reads `~/.greenode/` automatically — **you don't need any env vars in the MCP config**. Use `grn configure --profile <name>` for multiple environments, and select one with `GRN_PROFILE=<name>`.
+
+### Option B — environment variables
+
+Useful for CI / containers, or to override the files. These take priority over `~/.greenode/`:
+
+| Var | Purpose |
+|-----|---------|
+| `GRN_CLIENT_ID` | IAM service-account client id |
+| `GRN_CLIENT_SECRET` | IAM service-account client secret |
+| `GRN_PROJECT_ID` | project id (required for discovery tools) |
+| `GRN_DEFAULT_REGION` | region (e.g. `HCM-3`, `HAN`) |
+| `GRN_PROFILE` | which `~/.greenode` profile to use |
+
+Get the client_id / client_secret from a VNG Cloud IAM service account; verify auth anytime with the `get_access_token` tool.
 
 ## Install
 
@@ -67,7 +95,7 @@ The `"greennode"` key must match the `name` field in this repo's `.claude-plugin
 | Cursor | `.cursor/skills/` (project) — then reload the workspace |
 | Codex | `~/.agents/skills/` (or Codex's skills dir) |
 
-**2. Configure the `greenode-mcp` MCP server in that tool** — the skills call its tools, so without it they have nothing to drive. Use `--allow-write` to enable create/scale/delete. Credentials come from `~/.greenode/` (run `grn configure`); the `env` block below is only needed if you don't use `~/.greenode`. Adjust `command`/`args` to however you run `greenode-mcp` (e.g. `uv run --directory <repo>/src/vks-mcp-server vks-mcp-server`).
+**2. Configure the `greenode-mcp` MCP server in that tool** — the skills call its tools, so without it they have nothing to drive. Use `--allow-write` to enable create/scale/delete. If you ran `grn configure` (Credentials → Option A), the server reads `~/.greenode/` automatically and the configs below need **no `env` block**. Adjust `command`/`args` to however you run `greenode-mcp` (e.g. `uv run --directory <repo>/src/vks-mcp-server vks-mcp-server`).
 
 **Cursor** — `.cursor/mcp.json`:
 ```json
@@ -75,12 +103,7 @@ The `"greennode"` key must match the `name` field in this repo's `.claude-plugin
   "mcpServers": {
     "greenode-mcp": {
       "command": "vks-mcp-server",
-      "args": ["--allow-write"],
-      "env": {
-        "GRN_CLIENT_ID": "<client-id>",
-        "GRN_CLIENT_SECRET": "<client-secret>",
-        "GRN_PROJECT_ID": "<project-id>"
-      }
+      "args": ["--allow-write"]
     }
   }
 }
@@ -91,12 +114,9 @@ The `"greennode"` key must match the `name` field in this repo's `.claude-plugin
 [mcp_servers.greenode-mcp]
 command = "vks-mcp-server"
 args = ["--allow-write"]
-
-[mcp_servers.greenode-mcp.env]
-GRN_CLIENT_ID = "<client-id>"
-GRN_CLIENT_SECRET = "<client-secret>"
-GRN_PROJECT_ID = "<project-id>"
 ```
+
+If you prefer env vars (Credentials → Option B) instead of `grn configure`, add them — Cursor: an `"env": { "GRN_CLIENT_ID": "…", "GRN_CLIENT_SECRET": "…", "GRN_PROJECT_ID": "…" }` block in the server entry; Codex: a `[mcp_servers.greenode-mcp.env]` table with the same keys.
 
 In Cursor invoke a skill from the slash-command menu; in Codex it loads skills automatically (run `/mcp` to confirm the server is connected).
 
