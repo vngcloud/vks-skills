@@ -1,0 +1,15 @@
+{
+  "//": "Copy this into your project's .claude/settings.json (or your org's managed settings) to auto-distribute the VKS Assistant skills to your team. When a teammate trusts the repo, Claude Code prompts them to add the marketplace and install the plugin. The key 'vks-team' must match the 'name' field in vks-skills' marketplace.json.",
+  "extraKnownMarketplaces": {
+    "vks-team": {
+      "source": {
+        "source": "github",
+        "repo": "vks-team/vks-skills"
+      },
+      "autoUpdate": true
+    }
+  },
+  "enabledPlugins": {
+    "vks-skills@vks-team": true
+  }
+}

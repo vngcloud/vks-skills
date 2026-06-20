@@ -41,6 +41,21 @@ Copy the `skills/` subfolders into your Claude skills directory (e.g. `~/.claude
 
 Each skill is a standard `SKILL.md` with `name` + `description` frontmatter; skills are auto-discovered from `skills/`.
 
+### Team / org auto-install
+
+To push these skills to a whole team, copy [`examples/team-settings.json`](examples/team-settings.json) into your **project's** `.claude/settings.json` (or your org's managed settings). When a teammate trusts the repo, Claude Code prompts them to add the marketplace and install the plugin:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "vks-team": { "source": { "source": "github", "repo": "vks-team/vks-skills" }, "autoUpdate": true }
+  },
+  "enabledPlugins": { "vks-skills@vks-team": true }
+}
+```
+
+The `"vks-team"` key must match the `name` field in this repo's `.claude-plugin/marketplace.json`. For a **private** marketplace repo, background auto-update needs `GITHUB_TOKEN`/`GH_TOKEN` in the environment.
+
 ## Design
 
 These skills implement the design at `docs/superpowers/specs/2026-06-20-vks-assistant-skills-design.md` (in the working repo). The shared default-picking logic lives in `skills/vks/references/resource-defaults.md` and is consumed by both `vks-create-cluster` and `vks-nodegroup`.
